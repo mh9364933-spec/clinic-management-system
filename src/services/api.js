@@ -1,31 +1,17 @@
+import axios from 'axios';
+
 const API_BASE_URL = "http://localhost:3000/api";
 
-
-export const createPatient = async (patientData) => {
-
-  const response = await fetch(
-    `${API_BASE_URL}/patients`,
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify(patientData)
-    }
-  );
-
-
-  if (!response.ok) {
-
-    throw new Error(
-      "Failed to create patient"
-    );
-
+// إنشاء كائن Axios موحد عشان يشتغل مع .get و .post و .put و .delete
+export const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json"
   }
+});
 
-
-  return await response.json();
-
+// لو حبيت تسيب الدوال المنفصلة كمان عشان لو فيه مكان تاني بينادي عليها:
+export const createPatient = async (patientData) => {
+  const response = await api.post("/patients", patientData);
+  return response.data;
 };
