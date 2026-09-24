@@ -1,0 +1,100 @@
+{
+  "patients": [
+    {
+      "id": "1",
+      "name": "Ahmed Ali",
+      "phone": "01012345678",
+      "date_of_birth": "1998-05-10",
+      "gender": "Male",
+      "blood_type": "O+",
+      "email": "ahmed@example.com",
+      "address": "Damietta",
+      "medical_notes": "No known allergies"
+    },
+    {
+      "id": "2",
+      "name": "Mona Hassan",
+      "phone": "01198765432",
+      "date_of_birth": "2001-08-20",
+      "gender": "Female",
+      "blood_type": "A+",
+      "email": "mona@example.com",
+      "address": "New Damietta",
+      "medical_notes": "Regular follow-up"
+    },
+    {
+      "name": "rawan",
+      "phone": "011111888888",
+      "date_of_birth": "2026-09-26",
+      "gender": "Female",
+      "blood_type": "O+",
+      "email": "ro@gmail.com",
+      "address": "hhhhh",
+      "medical_notes": "hhhhh",
+      "id": "l1-vjzl3CaA"
+    },
+    {
+      "name": "hhhhh",
+      "phone": "000000",
+      "date_of_birth": "2026-10-01",
+      "gender": "Female",
+      "blood_type": "O+",
+      "email": "ttttt@gmail.com",
+      "address": "kkkkk",
+      "medical_notes": "jjjj",
+      "id": "CAPFLH3s3mM"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "1",
+      "patient_id": "1",
+      "date": "2026-09-24",
+      "time": "10:00",
+      "doctor": "Dr. Ahmed",
+      "reason": "General Checkup",
+      "status": "waiting"
+    },
+    {
+      "id": "2",
+      "patient_id": "2",
+      "date": "2026-09-24",
+      "time": "11:30",
+      "doctor": "Dr. Ahmed",
+      "reason": "Follow-up",
+      "status": "completed"
+    },
+    {
+      "patient_id": "2",
+      "date": "2026-09-26",
+      "time": "19:52",
+      "doctor": "mohamed",
+      "reason": "jjj",
+      "status": "waiting",
+      "id": "DFe-YJngdfs"
+    },
+    {
+      "status": "cancelled",
+      "id": "4HYImZl0tMw"
+    },
+    {
+      "patient_id": "2",
+      "date": "2026-09-24",
+      "time": "02:17",
+      "doctor": "ahmed",
+      "reason": "ttt",
+      "status": "waiting",
+      "id": "YHMRxVwbUUA"
+    },
+    {
+      "patient_id": "CAPFLH3s3mM",
+      "date": "2026-09-24",
+      "time": "15:55",
+      "doctor": "ahmed",
+      "reason": "jjjj",
+      "status": "waiting",
+      "id": "H4rTaCWePpE"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
