@@ -154,10 +154,29 @@ function patientName(patientId) {
   return patientsById.value[patientId]?.name || 'Unknown patient'
 }
 
+// const todaysAppointments = computed(() => {
+//   const todayISO = new Date().toISOString().slice(0, 10)
+//   return appointments.value.filter(a => !a.date || a.date === todayISO)
+// }) 
+
+
+function getTodayISO() {
+  const now = new Date()
+
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
+const todayISO = ref(getTodayISO())
+
 const todaysAppointments = computed(() => {
-  const todayISO = new Date().toISOString().slice(0, 10)
-  return appointments.value.filter(a => !a.date || a.date === todayISO)
+  return appointments.value.filter(a => a.date === todayISO.value)
 })
+
+
 
 const waitingList = computed(() =>
   todaysAppointments.value
@@ -213,7 +232,25 @@ function goToAddPatient() {
   router.push('/patients/add')
 }
 
-onMounted(fetchDashboardData)
+// onMounted(fetchDashboardData)
+
+
+onMounted(() => {
+  fetchDashboardData()
+
+  // تحديث التاريخ لو الصفحة فضلت مفتوحة لليوم التالي
+  setInterval(() => {
+    const newToday = getTodayISO()
+
+    if (newToday !== todayISO.value) {
+      todayISO.value = newToday
+      recalcStats()
+    }
+  }, 60 * 1000)
+})
+
+
+
 </script>
 
 <style scoped>

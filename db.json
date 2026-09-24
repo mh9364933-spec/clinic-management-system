@@ -1,15 +1,15 @@
 {
   "patients": [
     {
-      "id": "1",
       "name": "Ahmed Ali",
       "phone": "01012345678",
       "date_of_birth": "1998-05-10",
       "gender": "Male",
-      "blood_type": "O+",
+      "blood_type": "A-",
       "email": "ahmed@example.com",
       "address": "Damietta",
-      "medical_notes": "No known allergies"
+      "medical_notes": "No known allergies",
+      "id": "1"
     },
     {
       "id": "2",
@@ -43,6 +43,28 @@
       "address": "kkkkk",
       "medical_notes": "jjjj",
       "id": "CAPFLH3s3mM"
+    },
+    {
+      "name": "ro",
+      "phone": "01000000",
+      "date_of_birth": "2007-03-16",
+      "gender": "Female",
+      "blood_type": "B+",
+      "email": "ro@gmail.com",
+      "address": "kkkkk",
+      "medical_notes": "kkkk",
+      "id": "T_1ENqVBYw4"
+    },
+    {
+      "name": "gogo",
+      "phone": "0115000000",
+      "date_of_birth": "2022-06-08",
+      "gender": "Female",
+      "blood_type": "AB-",
+      "email": "gogo@gmail.com",
+      "address": "luxor",
+      "medical_notes": "allergies",
+      "id": "58OSRGi5szc"
     }
   ],
   "appointments": [
@@ -78,22 +100,22 @@
       "id": "4HYImZl0tMw"
     },
     {
-      "patient_id": "2",
-      "date": "2026-09-24",
-      "time": "02:17",
-      "doctor": "ahmed",
-      "reason": "ttt",
+      "patient_id": "T_1ENqVBYw4",
+      "date": "2026-09-25",
+      "time": "05:42",
+      "doctor": "amr d",
+      "reason": "jjj",
       "status": "waiting",
-      "id": "YHMRxVwbUUA"
+      "id": "au7TWk-0Cno"
     },
     {
-      "patient_id": "CAPFLH3s3mM",
-      "date": "2026-09-24",
-      "time": "15:55",
-      "doctor": "ahmed",
-      "reason": "jjjj",
+      "patient_id": "58OSRGi5szc",
+      "date": "2026-09-25",
+      "time": "04:01",
+      "doctor": "amr",
+      "reason": "cought",
       "status": "waiting",
-      "id": "H4rTaCWePpE"
+      "id": "AzpP7aFMu4Y"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
