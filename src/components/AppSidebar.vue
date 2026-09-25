@@ -17,6 +17,12 @@ function handleLinkClick() {
 
   <aside class="sidebar" :class="{ 'is-open': ui.isSidebarOpen }">
     <div class="logo">
+<template>
+
+  <aside class="sidebar">
+
+    <div class="logo">
+
       <div class="logo-icon">
         <i class="bi bi-heart-pulse"></i>
       </div>
