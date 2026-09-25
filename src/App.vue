@@ -22,7 +22,5 @@ import NavBar from './components/AppNavbar.vue'
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-.main-content {
-/* أو تنسيقات للمحتوى الرئيسي هنا إذا لزم الأمر يمكنك إضافة padding */ 
-}
+
 </style>
