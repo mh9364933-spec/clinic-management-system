@@ -1,22 +1,17 @@
 <template>
   <div class="layout">
     <!-- استخدام AppSidebar المعتمد في المشروع -->
-    <AppSidebar
-      :is-open="isSidebarOpen"
-      active-key="dashboard"
-      @close="isSidebarOpen = false"
-      @navigate="handleNavigate"
-    />
+    <AppSidebar />
 
     <div class="main-area">
-      <!-- استخدام AppNavbar المعتمد في المشروع -->
-      <AppNavbar @toggle-sidebar="isSidebarOpen = !isSidebarOpen" />
+      <!-- تم حذف AppNavbar القديم من هنا نهائياً -->
+      <!-- الناف بار الديناميكي (Log In / صورة الدكتور) بيتعرض مرة واحدة بس من App.vue فوق كل الصفحات -->
 
       <main class="page-container">
-        <!-- Welcome Section -->
+        <!-- Welcome Section (تم تحديثه ليعرض اسم الطبيب الديناميكي) -->
         <div class="page-header">
           <div>
-            <h2>Welcome back, Dr. Sarah 👋</h2>
+            <h2>Welcome back, {{ welcomeName }} 👋</h2>
             <p class="welcome-sub">Here's what's happening at the clinic today, {{ todayLabel }}</p>
           </div>
           <button class="primary-btn" @click="goToAddPatient">
@@ -28,7 +23,7 @@
         <div v-if="loading" class="loading-box">Loading dashboard data...</div>
         <div v-if="errorMsg" class="empty-box"><i class="bi bi-exclamation-triangle"></i><p>{{ errorMsg }}</p></div>
 
-        <!-- Statistics Cards باستخدام مكون StatCard الخاص بزميلك -->
+        <!-- Statistics Cards -->
         <section class="stats-grid">
           <StatCard
             title="Total Patients"
@@ -119,20 +114,31 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
-// تعديل المسارات وأسماء المكونات للتوافق مع شجرة المشروع
+// استدعاء Stores لإدارة الطبيب والإشعارات
+import { useAuthStore } from '../stores/auth'
+import { useNotificationsStore } from '../stores/notifications'
+
+// المكونات المستوردة (تم حذف استيراد AppNavbar القديم)
 import AppSidebar from '../components/AppSidebar.vue'
-import AppNavbar from '../components/AppNavbar.vue'
 import StatCard from '../components/StatCard.vue'
 import PatientCard from '../components/PatientCard.vue'
 import StatusBadge from '../components/StatusBadge.vue'
 
 const router = useRouter()
-const isSidebarOpen = ref(false)
+const auth = useAuthStore()
+const notifications = useNotificationsStore()
+
 const loading = ref(false)
 const errorMsg = ref('')
 
 const patients = ref([])
 const appointments = ref([])
+
+// خاصية حساسية لاسم الطبيب (يعرض الاسم المسجل أو الإفتراضي)
+const welcomeName = computed(() => {
+  if (!auth.isAuthenticated) return 'Doctor'
+  return auth.doctor.name.startsWith('Dr.') ? auth.doctor.name : `Dr. ${auth.doctor.name}`
+})
 
 const todayLabel = computed(() =>
   new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long' })
@@ -148,10 +154,29 @@ function patientName(patientId) {
   return patientsById.value[patientId]?.name || 'Unknown patient'
 }
 
+// const todaysAppointments = computed(() => {
+//   const todayISO = new Date().toISOString().slice(0, 10)
+//   return appointments.value.filter(a => !a.date || a.date === todayISO)
+// }) 
+
+
+function getTodayISO() {
+  const now = new Date()
+
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
+const todayISO = ref(getTodayISO())
+
 const todaysAppointments = computed(() => {
-  const todayISO = new Date().toISOString().slice(0, 10)
-  return appointments.value.filter(a => !a.date || a.date === todayISO)
+  return appointments.value.filter(a => a.date === todayISO.value)
 })
+
+
 
 const waitingList = computed(() =>
   todaysAppointments.value
@@ -176,23 +201,22 @@ function recalcStats() {
   ).length
 }
 
-// تعديل جلب البيانات باستخدام fetch ليتوافق مع طريقة api.js
 async function fetchDashboardData() {
   loading.value = true
   errorMsg.value = ''
   try {
     const [patientsRes, appointmentsRes] = await Promise.all([
-      fetch('http://localhost:3000/api/patients'),
-      fetch('http://localhost:3000/api/appointments')
+      fetch('http://localhost:3000/patients'),
+      fetch('http://localhost:3000/appointments')
     ])
 
     if (!patientsRes.ok || !appointmentsRes.ok) {
       throw new Error('Failed to fetch data')
     }
 
-    patients.value = await patientsRes.data ? await patientsRes.json() : []
-    appointments.value = await appointmentsRes.data ? await appointmentsRes.json() : []
-    
+    patients.value = await patientsRes.json()
+    appointments.value = await appointmentsRes.json()
+
     recalcStats()
   } catch (error) {
     errorMsg.value = 'Failed to load dashboard data.'
@@ -202,22 +226,31 @@ async function fetchDashboardData() {
   }
 }
 
+// زر إضافة المريض مع تسجيل إشعار
 function goToAddPatient() {
+  notifications.push('New Patient Action', 'Navigated to Add Patient page.')
   router.push('/patients/add')
 }
 
-function handleNavigate(key) {
-  const routeMap = {
-    dashboard: '/dashboard',
-    patients: '/patients',
-    appointments: '/appointments',
-    reports: '/reports',
-    settings: '/settings',
-  }
-  if (routeMap[key]) router.push(routeMap[key])
-}
+// onMounted(fetchDashboardData)
 
-onMounted(fetchDashboardData)
+
+onMounted(() => {
+  fetchDashboardData()
+
+  // تحديث التاريخ لو الصفحة فضلت مفتوحة لليوم التالي
+  setInterval(() => {
+    const newToday = getTodayISO()
+
+    if (newToday !== todayISO.value) {
+      todayISO.value = newToday
+      recalcStats()
+    }
+  }, 60 * 1000)
+})
+
+
+
 </script>
 
 <style scoped>
@@ -225,6 +258,14 @@ onMounted(fetchDashboardData)
   margin: 4px 0 0;
   color: var(--text-muted, #8b96ad);
   font-size: 0.9rem;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .main-area {
@@ -268,12 +309,17 @@ onMounted(fetchDashboardData)
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* من هنا وتحت: السايدبار بيبقى مخفي/عائم (off-canvas) وبيتفتح بزرار
+   الهامبرغر في الناف بار، فمفيش داعي لهامش ثابت له جنب المحتوى */
 @media (max-width: 900px) {
   .main-area { margin-inline-start: 0; }
   .content-grid { grid-template-columns: 1fr; }
+  .page-header { align-items: flex-start; }
 }
 
 @media (max-width: 560px) {
   .stats-grid { grid-template-columns: 1fr; }
+  .page-container { padding: 16px; }
+  .page-header .primary-btn { width: 100%; justify-content: center; }
 }
 </style>
