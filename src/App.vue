@@ -23,6 +23,6 @@ import NavBar from './components/AppNavbar.vue'
 }
 
 .main-content {
-  /* يمكنك إضافة padding أو تنسيقات للمحتوى الرئيسي هنا إذا لزم الأمر */
+/* أو تنسيقات للمحتوى الرئيسي هنا إذا لزم الأمر يمكنك إضافة padding */ 
 }
 </style>

@@ -65,6 +65,17 @@
       "address": "luxor",
       "medical_notes": "allergies",
       "id": "58OSRGi5szc"
+    },
+    {
+      "name": "mahmoud",
+      "phone": "01016498229",
+      "date_of_birth": "2006-02-21",
+      "gender": "Male",
+      "blood_type": "O-",
+      "email": "mahmoud@gmail.com",
+      "address": "mahmoud",
+      "medical_notes": "smoking",
+      "id": "Ts3jhhWPWvw"
     }
   ],
   "appointments": [
@@ -100,12 +111,7 @@
       "id": "4HYImZl0tMw"
     },
     {
-      "patient_id": "T_1ENqVBYw4",
-      "date": "2026-09-25",
-      "time": "05:42",
-      "doctor": "amr d",
-      "reason": "jjj",
-      "status": "waiting",
+      "status": "completed",
       "id": "au7TWk-0Cno"
     },
     {
