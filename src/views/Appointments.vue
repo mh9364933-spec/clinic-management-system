@@ -395,10 +395,33 @@ const getData = async () => {
 
 };
 
+// const filteredAppointments = computed(() => {
+
+//   return appointments.value.filter(
+//     appointment => {
+
+//       const dateMatch =
+//         !selectedDate.value ||
+//         appointment.date === selectedDate.value;
+
+//       const statusMatch =
+//         selectedStatus.value === "all" ||
+//         appointment.status === selectedStatus.value;
+
+//       return dateMatch && statusMatch;
+
+//     }
+//   );
+
+// }); 
+
+
+
+
 const filteredAppointments = computed(() => {
 
-  return appointments.value.filter(
-    appointment => {
+  return appointments.value
+    .filter(appointment => {
 
       const dateMatch =
         !selectedDate.value ||
@@ -410,10 +433,27 @@ const filteredAppointments = computed(() => {
 
       return dateMatch && statusMatch;
 
-    }
-  );
+    })
+    .map(appointment => {
+
+      const patient = patients.value.find(
+        patient =>
+          String(patient.id) ===
+          String(appointment.patient_id)
+      );
+
+      return {
+        ...appointment,
+        patient
+      };
+
+    });
 
 });
+
+
+
+
 
 const addAppointment = async () => {
 

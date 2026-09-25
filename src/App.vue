@@ -1,28 +1,26 @@
+<script setup>
+import { RouterView } from 'vue-router'
+import NavBar from './components/AppNavbar.vue'
+</script>
+
 <template>
+  <div class="app-shell">
+    <!-- الشريط العلوي يظل ثابتاً في كل الصفحات -->
+    <NavBar />
 
-  <div class="app-layout">
-
-    <AppSidebar />
-
-    <div class="main-area">
-
-      <AppNavbar />
-
-      <main>
-
-        <router-view />
-
-      </main>
-
-    </div>
-
+    <!-- هنا يتم عرض الصفحة الحالية حسب الرابط (Dashboard, Patients, Appointments...) -->
+    <main class="main-content">
+      <RouterView />
+    </main>
   </div>
-
 </template>
 
-<script setup>
+<style scoped>
+.app-shell {
+  min-height: 100vh;
+  background: #f8fafc;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
 
-import AppSidebar from "./components/AppSidebar.vue";
-import AppNavbar from "./components/AppNavbar.vue";
 
-</script>
+</style>
